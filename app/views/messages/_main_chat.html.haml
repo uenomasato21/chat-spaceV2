@@ -1,31 +1,4 @@
 .chat-main
   .chat-main__group-info
-    .chat-main__group-info__header
-      .chat-main__group-info__name
-        test
-      .chat-main__group-info__member
-        Member : masa
-    .chat-main__edit
-      = link_to "#", class: "chat-space__btn" do
-        Edit
   .chat-main__message-list
-    .chat-main__message-list__info
-      .chat-main__message-list__info__upper
-        .chat-main__message-list__info__upper__talker
-          masa
-        .chat-main__message-list__info__upper__date
-          2020/05/14(Thu) 11:23:35
-      .chat-main__message-list__info__lower
-        .chat-main__message-list__info__lower__text
-          おはよう！
   .chat-main__message-form
-    .chat-main__message-form__new_message
-      .input-box
-        %input{type: "text", class: "input-box__text", placeholder: "type a message"}
-        -# %input{class: "input-box__imege"}
-        %label{class: "input-box__image"}
-          = icon('fas' ,'image')
-          -# %input{type "file",class: "input-box__image__file"}
-          %input{type: "file",class:"input-box__image__file"}
-      .submit-btn
-        Send
