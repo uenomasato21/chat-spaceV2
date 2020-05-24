@@ -3,24 +3,17 @@
     .chat-side__user-name__top-items
       = current_user.name
       .chat-side__user-name__top-items-icons
-        = link_to do
+        = link_to new_group_path do
           = icon('fas', 'pen-square', class: 'icon')
           %spin<>
         = link_to edit_user_path(current_user) do
           = icon('fas', 'cog', class: 'icon')
           %spin<>
   .chat-side__group-list
-    .chat-side__group-list__name
-      グループ名
-      .chat-side__group-list__name__messages
-        新着メッセージ
-  .chat-side__group-list
-    .chat-side__group-list__name
-      グループ名
-      .chat-side__group-list__name__messages
-        新着メッセージ
-  .chat-side__group-list
-    .chat-side__group-list__name
-      グループ名
-      .chat-side__group-list__name__messages
-        新着メッセージ
+    - current_user.groups.each do |group|
+      .group
+        = link_to '#' do
+          .group__name
+            = group.name
+          .group__message
+            メッセージはまだありません。
