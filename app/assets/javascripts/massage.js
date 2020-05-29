@@ -65,7 +65,6 @@ $('#new_message').on('submit', function(e){
   })
 
   var reloadMessages = function() {
-    if (document.location.href.match(/\/groups\/\d+\/messages/)){
     var last_message_id = $('.message:last').data("message-id");
     var href = 'api/messages#index {:format=>"json"}' 
     $.ajax({
@@ -86,6 +85,7 @@ $('#new_message').on('submit', function(e){
       alert('メッセージの取得に失敗しました');
     });
   };
-  }
+  if (document.location.href.match(/\/groups\/\d+\/messages/)){
   setInterval(reloadMessages, 5000);
+  }
 });
