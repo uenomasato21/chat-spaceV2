@@ -70,8 +70,6 @@ $(function() {
     $(this)
       .parent()
       .remove();
-      addDeleteUser(userName, userId);
-      addMember(userId);
   });
 });
 

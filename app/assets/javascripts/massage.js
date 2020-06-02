@@ -74,16 +74,12 @@ $('#new_message').on('submit', function(e){
     processData: false,
     contentType: false,
   })
-  .done(function(messages) {
-    if (messages.length !== 0) {
-      var insertHTML = "";
-      $.each(messages, function(i, message) {
-        console.log(message)
-        insertHTML += buildHTML(message)
-      });
-      $('.messages').append(insertHTML);
-      $('.messages').animate({ scrollTop: $('.messages')[0].scrollHeight});
-    }
+  .done(function(data) {
+      var html = buildHTML(data);
+      $('.messages').append(html);
+      $('form')[0].reset();
+      $('.chat-main__message-list').animate({ scrollTop: $('.chat-main__message-list')[0].scrollHeight});
+      console.log(html)
   })
   .fail(function(){
     alert('error')
@@ -101,12 +97,15 @@ $('#new_message').on('submit', function(e){
       data: {id: last_message_id}
     })
     .done(function (messages) {
-      var insertHTML ='';
-          messages.forEach(function(message){
-          insertHTML = buildHTML(message);
-            $('.messages').append(insertHTML);
-            $('.messages').animate({scrollTop: $('.messages')[0].scrollHeight});
-      });
+      if (messages.length !== 0) {
+        var insertHTML = "";
+        $.each(messages, function(i, message) {
+
+          insertHTML += buildHTML(message)
+        });
+        $('.messages').append(insertHTML);
+        $('.chat-main__message-list').animate({ scrollTop: $('.chat-main__message-list')[0].scrollHeight});
+      }
     })
     .fail(function () {    
       alert('メッセージの取得に失敗しました');
