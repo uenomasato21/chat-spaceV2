@@ -1,61 +1,89 @@
 $(function(){ 
   function buildHTML(message){
     if ( message.image ) {
-        var html =
-         `<div class="message" data-message-id=${message.id}>
-            <div class="upper-message">
-              <div class="upper-message__user-name">
-                ${message.user_name}
-              </div>
-              <div class="upper-message__date">
-                ${message.created_at}
-              </div>
-            </div>
-            <div class="lower-message">
-              <p class="lower-message__content">
-                ${message.content}
-              </p>
-            </div>
-            <img src=${message.image} >
-          </div>`
+        var html = `<div class="message" data-message-id=${message.id}>
+        <div class="chat-main__message-list__info">
+          <div class="chat-main__message-list__info__upper">
+          <div class="chat-main__message-list__info__upper__talker">
+            ${message.user_name}
+          </div>
+          <div class="chat-main__message-list__info__upper__date">
+            ${message.created_at}
+          </div>
+        </div>
+        <div class="chat-main__message-list__info__lower">
+          <p class="chat-main__message-list__info__lower__text">
+            ${message.content}
+          </p>
+        </div>
+        <img src=${message.image} >
+      </div>`;
+
+        // `
+        // <div class="message" data-message-id=${message.id}></div>
+        //  <div class="chat-main__message-list__info" >
+        //     <div class="chat-main__message-list__info__upper">
+        //       <div class="chat-main__message-list__info__upper__talker">
+        //        ${message.user_name}
+        //       </div>
+        //     </div>
+        //   </div>`
+           
+
         return html;
       } else {
-        var html =
-         `<div class="message" data-message-id=${message.id}>
-            <div class="upper-message">
-              <div class="upper-message__user-name">
-                ${message.user_name}
-              </div>
-              <div class="upper-message__date">
-                ${message.created_at}
-              </div>
-            </div>
-            <div class="lower-message">
-              <p class="lower-message__content">
-                ${message.content}
-              </p>
-            </div>
-          </div>`
+        var html = `<div class="message" data-message-id=${message.id}>
+        <div class="chat-main__message-list__info">
+          <div class="chat-main__message-list__info__upper">
+          <div class="chat-main__message-list__info__upper__talker">
+            ${message.user_name}
+          </div>
+          <div class="chat-main__message-list__info__upper__date">
+            ${message.created_at}
+          </div>
+        </div>
+        <div class="chat-main__message-list__info__lower">
+          <p class="chat-main__message-list__info__lower__text">
+            ${message.content}
+          </p>
+        </div>
+      </div>`;
+        // `<div class="message" data-message-id=${message.id}></div>
+        //  <div class="chat-main__message-list__info" >
+        //     <div class="chat-main__message-list__info__upper">
+        //       <div class="chat-main__message-list__info__upper__talker">
+        //        ${message.user_name}
+        //       </div>
+        //     </div>
+        //   </div>`
+          
+
         return html;
       };
     }
+
 $('#new_message').on('submit', function(e){
   e.preventDefault();
   var formData = new FormData(this);
-  var url = $(this).attr('action');   	
+  var url = $(this).attr('action');   
   $.ajax({
     url: url,
     type: "POST",
     data: formData,
     dataType: "json",
     processData: false,
-    contentType: false
+    contentType: false,
   })
-  .done(function(message){
-    var html =buildHTML(message);
-    $('.messages').append(html)
-    $('#new_message')[0].reset();
-    $('.messages').animate({scrollTop: $('.messages')[0].scrollHeight});
+  .done(function(messages) {
+    if (messages.length !== 0) {
+      var insertHTML = "";
+      $.each(messages, function(i, message) {
+        console.log(message)
+        insertHTML += buildHTML(message)
+      });
+      $('.messages').append(insertHTML);
+      $('.messages').animate({ scrollTop: $('.messages')[0].scrollHeight});
+    }
   })
   .fail(function(){
     alert('error')
@@ -66,12 +94,11 @@ $('#new_message').on('submit', function(e){
 
   var reloadMessages = function() {
     var last_message_id = $('.message:last').data("message-id");
-    var href = 'api/messages#index {:format=>"json"}' 
     $.ajax({
-      url: href,
+      url: "api/messages",
       type: 'get',
       dataType: 'json',
-      data: {id: last_message_id }
+      data: {id: last_message_id}
     })
     .done(function (messages) {
       var insertHTML ='';
@@ -86,6 +113,6 @@ $('#new_message').on('submit', function(e){
     });
   };
   if (document.location.href.match(/\/groups\/\d+\/messages/)){
-  setInterval(reloadMessages, 5000);
+  setInterval(reloadMessages, 7000);
   }
 });
